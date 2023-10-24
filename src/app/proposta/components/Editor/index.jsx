@@ -1,11 +1,15 @@
 'use client';
 
-import JoditEditor from 'jodit-react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { v4 as uuid } from 'uuid';
 import { propostaKey } from '../../../../config/localstorage';
+
+const JoditEditor = dynamic(() => import("jodit-react"), {
+  ssr: false,
+});
 
 export const Editor = ({ document, toUpdate }) => {
   const router = useRouter();
