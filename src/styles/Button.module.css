@@ -1,0 +1,51 @@
+.button {
+  position: relative;
+
+  padding: 15px 30px;
+  border-radius: 12px;
+
+  background-color: #3498db;
+
+  text-align: center;
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #2980b9;
+}
+
+.tooltip {
+  width: 200px;
+
+  background-color: #333;
+
+  color: #fff;
+  text-align: center;
+
+  border-radius: 5px;
+  padding: 10px;
+
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+
+  /* Melhor que usar margin-left */
+  left: 50%;
+  transform: translateX(-50%);
+
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.button:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+
