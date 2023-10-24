@@ -1,7 +1,10 @@
-import { Inter } from 'next/font/google'
-import '../styles/globals.css'
+import { Roboto } from 'next/font/google';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../styles/globals.css';
+import '../styles/tailwind.css';
 
-const inter = Inter({ subsets: ['latin'] })
+const roboto = Roboto({ subsets: ['latin'], weight: ['100', '300', '400', '500', '700', '900'] })
 
 export const metadata = {
   title: 'Sistema de Gerenciamento de Proposta',
@@ -11,7 +14,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-br" className='min-h-screen'>
-      <body className={inter.className}>{children}</body>
+
+      <body className={roboto.className}>
+        {children}
+        <ToastContainer />
+      </body>
     </html>
   )
 }
