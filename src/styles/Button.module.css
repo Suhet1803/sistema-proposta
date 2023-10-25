@@ -19,7 +19,7 @@
 }
 
 .tooltip {
-  width: 200px;
+  width: 280px;
 
   background-color: #333;
 
@@ -46,6 +46,3 @@
   visibility: visible;
   opacity: 1;
 }
-
-
-
