@@ -1,12 +1,14 @@
 'use client';
 
+import { Home } from 'lucide-react';
 import Link from 'next/link';
 import styles from '../../styles/Button.module.css';
 
 export function Navigation() {
   return (
     <nav className="flex items-center justify-center gap-4 flex-wrap max-w-6xl w-full mx-auto">
-      <Link href="/" className={styles.button}>
+      <Link href="/" className={`flex items-center gap-1 ${styles.button}`}>
+        <Home className='w-4 h-4' />
         Tela inicial
         <span className={styles.tooltip}>
           Ir para tela inicial da aplicação
