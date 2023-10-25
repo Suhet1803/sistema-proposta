@@ -1,5 +1,6 @@
 'use client';
 
+import { Trash } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -216,9 +217,10 @@ export const Editor = ({ document, toUpdate }) => {
             </button>
 
             <button
-              className='bg-red-500 text-white px-8 py-2 rounded-md hover:brightness-110 transition-all'
+              className='bg-red-500 text-white px-8 py-2 rounded-md hover:brightness-110 transition-all flex items-center gap-1 justify-center'
               onClick={() => handleDeleteDocument(data.id)}
             >
+              <Trash className='h-4 w-4' />
               Deletar
             </button>
           </>

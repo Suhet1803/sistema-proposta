@@ -6,7 +6,9 @@ import { toast } from 'react-toastify';
 import { propostaKey } from '../../../../../config/localstorage';
 import { Editor } from '../../../components/Editor';
 
-export function EditDocument() {
+export function EditDocument({
+  setDocumentsHistory,
+}) {
   const router = useRouter();
   const documentId = useParams()?.id;
   // [{ id: '', title: '', content: '', created_at: '', updated_at: ''}]
@@ -58,7 +60,7 @@ export function EditDocument() {
     <>
       <div className="max-w-5xl w-full mx-auto px-8 flex flex-col gap-8">
         <h1 className="text-black tracking-wider font-bold text-3xl font-sans">Editar proposta</h1>
-        <Editor document={document} toUpdate />
+        <Editor document={document} toUpdate setDocumentsHistory={setDocumentsHistory} />
       </div>
     </>
   )

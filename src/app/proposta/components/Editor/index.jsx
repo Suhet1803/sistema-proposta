@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { v4 as uuid } from 'uuid';
-import { propostaKey } from '../../../../config/localstorage';
+import { propostaHistoryKey, propostaKey } from '../../../../config/localstorage';
 
 const JoditEditor = dynamic(() => import("jodit-react"), {
   ssr: false,
 });
 
-export const Editor = ({ document, toUpdate }) => {
+export const Editor = ({ document, toUpdate, setDocumentsHistory }) => {
   const router = useRouter();
 
   const config = useMemo(() => {
@@ -46,9 +46,11 @@ export const Editor = ({ document, toUpdate }) => {
     }
 
     const documentsSaved = localStorage.getItem(propostaKey);
+    const documentsHistorySaved = localStorage.getItem(propostaHistoryKey);
 
     try {
       let documentsSavedParsed = JSON.parse(documentsSaved) || [];
+      let documentsHistorySavedParsed = JSON.parse(documentsHistorySaved) || [];
 
       const foundIndex = documentsSavedParsed.findIndex(document => document.id === data.id);
 
@@ -62,13 +64,31 @@ export const Editor = ({ document, toUpdate }) => {
 
         localStorage.setItem(propostaKey, JSON.stringify(documentsSavedParsed));
 
+        const newHistoryData = {
+          id: uuid(),
+          title: data.title,
+          content: data.content,
+          documentId: document.id,
+          updated_at: new Date(),
+          created_at: new Date(),
+        };
+
+        documentsHistorySavedParsed = [newHistoryData, ...documentsHistorySavedParsed];
+
+        documentsHistorySavedParsed = documentsHistorySavedParsed.filter(document => {
+          return document.documentId === newHistoryData.documentId
+        })
+
+        setDocumentsHistory(documentsHistorySavedParsed);
+
+        localStorage.setItem(propostaHistoryKey, JSON.stringify(documentsHistorySavedParsed));
         toast.success('Proposta atualizada com sucesso');
       }
     } catch (error) {
       localStorage.removeItem(propostaKey);
       localStorage.setItem(propostaKey, JSON.stringify([data]));
     }
-  }, [data]);
+  }, [data, setDocumentsHistory, document]);
 
   const handleCreateDocument = useCallback(() => {
     if (!data?.title) {
