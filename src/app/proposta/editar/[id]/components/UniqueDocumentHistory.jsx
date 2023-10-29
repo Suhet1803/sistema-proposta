@@ -1,5 +1,6 @@
 'use client';
 
+import { Calculator, Equal, X } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -27,6 +28,8 @@ export function UniqueDocumentHistory({
   const titleRef = useRef('');
 
   const [data, setData] = useState(document);
+  const calculatorValueOne = useRef(null);
+  const calculatorValueTwo = useRef(null);
 
   const handleUpdateDocument = useCallback(() => {
     const documentsHistorySaved = localStorage.getItem(propostaHistoryKey);
@@ -57,6 +60,34 @@ export function UniqueDocumentHistory({
     }
   }, [foundDocumentsHistory, data]);
 
+
+  const calcular = () => {
+    if (!calculatorValueOne.current?.value) {
+      return toast.error('Adicione o valor 1 para calcular');
+    }
+
+    if (!calculatorValueTwo.current?.value) {
+      return toast.error('Adicione o valor 2 para calcular');
+    }
+
+    const result = calculatorValueOne.current?.value * calculatorValueTwo.current?.value;
+
+    setData(prev => {
+      return {
+        ...prev,
+        calculator: {
+          ...prev.calculator,
+          valueOne: calculatorValueOne.current.value,
+          valueTwo: calculatorValueTwo.current.value,
+          operator: '*', // Multiplicator
+          result
+        }
+      }
+    });
+
+    toast.success('Valor calculado. Agora é só salvar a proposta para atualizar.')
+  };
+
   return (
     <div className='flex flex-col gap-4'>
       <input
@@ -66,6 +97,47 @@ export function UniqueDocumentHistory({
         placeholder='Título da proposta'
         defaultValue={document?.title}
       />
+
+      <div className="flex flex-col my-2 gap-2 items-start">
+        <span className="font-bold text-lg">Calculadora de multiplicação</span>
+        <div className="flex gap-2 items-end">
+          <label htmlFor="valorX" className='flex flex-col gap-0.5'>
+            <input
+              type="number"
+              id="valorX"
+              placeholder="Digite o valor 1"
+              ref={calculatorValueOne}
+              defaultValue={data?.calculator?.valueOne}
+              className='px-4 py-2 rounded-md text-black outline-0 focus:border-green-500 border-transparent border-2'
+            />
+          </label>
+          <span className="">
+            <X />
+          </span>
+          <label htmlFor="valorY" className='flex flex-col gap-0.5'>
+            <input
+              type="number"
+              id="valorY"
+              placeholder="Digite o valor 2"
+              ref={calculatorValueTwo}
+              defaultValue={data?.calculator?.valueTwo}
+              className='px-4 py-2 rounded-md text-black outline-0 focus:border-green-500 border-transparent border-2'
+            />
+          </label>
+          <span className="">
+            <Equal />
+          </span>
+          <span className='font-bold text-2xl'>{data?.calculator?.result}</span>
+        </div>
+
+        <button
+          onClick={calcular}
+          className='flex items-center gap-1 bg-green-500 text-white px-8 py-2 rounded-md hover:brightness-110 transition-all'
+        >
+          <Calculator className='w-4 h-4' />
+          Calcular
+        </button>
+      </div>
 
       <JoditEditor
         ref={editor}
