@@ -30,6 +30,8 @@ export function UniqueDocumentHistory({
   const [data, setData] = useState(document);
   const calculatorValueOne = useRef(null);
   const calculatorValueTwo = useRef(null);
+  const calculatorValueThree = useRef(null);
+  const calculatorProfile = useRef(null);
 
   const handleUpdateDocument = useCallback(() => {
     const documentsHistorySaved = localStorage.getItem(propostaHistoryKey);
@@ -70,7 +72,15 @@ export function UniqueDocumentHistory({
       return toast.error('Adicione o valor 2 para calcular');
     }
 
-    const result = calculatorValueOne.current?.value * calculatorValueTwo.current?.value;
+    if (!calculatorValueThree.current?.value) {
+      return toast.error('Adicione o valor 3 para calcular');
+    }
+
+    if (!calculatorProfile.current?.value) {
+      return toast.error('Adicione o perfil para calcular');
+    }
+
+    const result = calculatorValueOne.current?.value * calculatorValueTwo.current?.value * calculatorValueThree.current?.value;
 
     setData(prev => {
       return {
@@ -79,6 +89,7 @@ export function UniqueDocumentHistory({
           ...prev.calculator,
           valueOne: calculatorValueOne.current.value,
           valueTwo: calculatorValueTwo.current.value,
+          profile: calculatorProfile.current.value,
           operator: '*', // Multiplicator
           result
         }
@@ -100,35 +111,61 @@ export function UniqueDocumentHistory({
 
       <div className="flex flex-col my-2 gap-2 items-start">
         <span className="font-bold text-lg">Calculadora de multiplicação</span>
-        <div className="flex gap-2 items-end">
-          <label htmlFor="valorX" className='flex flex-col gap-0.5'>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="calculatorProfile" className='flex flex-col gap-0.5 max-w-sm'>
             <input
-              type="number"
-              id="valorX"
-              placeholder="Digite o valor 1"
-              ref={calculatorValueOne}
-              defaultValue={data?.calculator?.valueOne}
+              type="text"
+              id="calculatorProfile"
+              placeholder="Digite o perfil"
+              ref={calculatorProfile}
+              defaultValue={data?.calculator?.profile}
               className='px-4 py-2 rounded-md text-black outline-0 focus:border-green-500 border-transparent border-2'
             />
           </label>
-          <span className="">
-            <X />
-          </span>
-          <label htmlFor="valorY" className='flex flex-col gap-0.5'>
-            <input
-              type="number"
-              id="valorY"
-              placeholder="Digite o valor 2"
-              ref={calculatorValueTwo}
-              defaultValue={data?.calculator?.valueTwo}
-              className='px-4 py-2 rounded-md text-black outline-0 focus:border-green-500 border-transparent border-2'
-            />
-          </label>
-          <span className="">
-            <Equal />
-          </span>
-          <span className='font-bold text-2xl'>{data?.calculator?.result}</span>
+          <div className="flex gap-2 items-end">
+            <label htmlFor="valorX" className='flex flex-col gap-0.5'>
+              <input
+                type="number"
+                id="valorX"
+                placeholder="Digite o valor 1"
+                ref={calculatorValueOne}
+                defaultValue={data?.calculator?.valueOne}
+                className='px-4 py-2 rounded-md text-black outline-0 focus:border-green-500 border-transparent border-2'
+              />
+            </label>
+            <span className="">
+              <X />
+            </span>
+            <label htmlFor="valorY" className='flex flex-col gap-0.5'>
+              <input
+                type="number"
+                id="valorY"
+                placeholder="Digite o valor 2"
+                ref={calculatorValueTwo}
+                defaultValue={data?.calculator?.valueTwo}
+                className='px-4 py-2 rounded-md text-black outline-0 focus:border-green-500 border-transparent border-2'
+              />
+            </label>
+            <span className="">
+              <X />
+            </span>
+            <label htmlFor="valorZ" className='flex flex-col gap-0.5'>
+              <input
+                type="number"
+                id="valorZ"
+                placeholder="Digite o valor 3"
+                ref={calculatorValueThree}
+                defaultValue={data?.calculator?.valueThree}
+                className='px-4 py-2 rounded-md text-black outline-0 focus:border-green-500 border-transparent border-2'
+              />
+            </label>
+            <span className="">
+              <Equal />
+            </span>
+            <span className='font-bold text-2xl'>{data?.calculator?.result}</span>
+          </div>
         </div>
+
 
         <button
           onClick={calcular}
